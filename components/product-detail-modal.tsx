@@ -36,7 +36,7 @@ export default function ProductDetailModal({ isOpen, onClose, product }: Product
       {/* Modal Content */}
       <div 
         className={cn(
-          "relative w-full max-w-2xl glass border border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-500 transform",
+          "relative w-full max-w-2xl glass border border-white/10 rounded-3xl md:rounded-[2.5rem] overflow-hidden transition-all duration-500 transform",
           isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-8"
         )}
       >

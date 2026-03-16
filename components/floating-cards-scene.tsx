@@ -197,8 +197,12 @@ function FloatingCard({
       0.02
     );
 
-    // Scale - background cards are 8.0 for immersive effect
-    const targetScale = isActive ? 1.6 : 8.0; 
+    // Scale - adjusted for mobile viewports
+    const isMobile = viewport.width < 7;
+    const targetScale = isActive 
+      ? (isMobile ? 1.0 : 1.6) 
+      : (isMobile ? 5.0 : 8.0);
+ 
     meshRef.current.scale.setScalar(
       THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.04)
     );
@@ -221,10 +225,10 @@ function FloatingCard({
           onClick={onClick}
           className={cn(
             "rounded-3xl cursor-pointer transition-all duration-700 ease-out",
-            "glass border",
+            "glass border backdrop-blur-md",
             isActive
-              ? "w-[560px] min-h-[420px] p-12 border-primary/30 glow-primary"
-              : "w-[320px] p-6 border-border/20 hover:border-border/40"
+              ? "w-[90vw] md:w-[560px] min-h-[400px] p-8 md:p-12 border-primary/30 glow-primary"
+              : "w-[280px] p-6 border-border/20 hover:border-border/40"
           )}
           style={{
             background: isActive
@@ -300,8 +304,10 @@ function FloatingCard({
 }
 
 function ParticleField() {
+  const { viewport } = useThree();
   const particlesRef = useRef<THREE.Points>(null);
-  const particleCount = 500;
+  const isMobile = viewport.width < 7;
+  const particleCount = isMobile ? 250 : 500;
 
   const [positions, setPositions] = React.useState<Float32Array | null>(null);
 
