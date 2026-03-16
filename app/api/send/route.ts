@@ -1,9 +1,14 @@
 import { UserConfirmationTemplate, AdminNotificationTemplate } from '@/components/email-template';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  if (!process.env.RESEND_API_KEY) {
+    console.error("RESEND_API_KEY is not defined in environment variables.");
+    return Response.json({ error: "Email service misconfigured" }, { status: 500 });
+  }
+
   try {
     const { name, email, message } = await request.json();
 
