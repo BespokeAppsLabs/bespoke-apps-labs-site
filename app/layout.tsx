@@ -8,12 +8,12 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
-  title: 'Bespoke Applications Labs | Custom Software & AI Solutions',
+  title: 'Bespoke Labs',
   description: 'We build bespoke web and mobile applications with cutting-edge AI integration. Transform your business with custom digital solutions.',
   generator: 'v0.app',
   icons: {
-    icon: '/next.svg',
-    apple: '/next.svg',
+    icon: '/icon.png',
+    apple: '/icon.png',
   },
 }
 
