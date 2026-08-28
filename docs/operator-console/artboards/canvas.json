@@ -1,0 +1,72 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "Console — desktop",
+      "is_interactive": true
+    },
+    {
+      "file": "Boot.dc.html",
+      "x": 1560,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "Entry sequence"
+    },
+    {
+      "file": "Mobile.dc.html",
+      "x": 0,
+      "y": 1060,
+      "w": 390,
+      "h": 844,
+      "title": "Console — mobile",
+      "is_interactive": true
+    },
+    {
+      "file": "System.dc.html",
+      "x": 510,
+      "y": 1060,
+      "w": 900,
+      "h": 1560,
+      "title": "System sheet + build plan",
+      "print": "flow"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "plan-overview",
+      "x": 0,
+      "y": -320,
+      "w": 900,
+      "text": "THE CONSOLE\n\nOne viewport-height operator console. Nothing scrolls. Every section opens as a dialog over it.\n\nThe layout now follows the wiring: six panels, one per capability, three a side. Each panel owns exactly one node on the ring, and each node is wired back into the core of the sphere. Hover a panel or a node and the whole circuit lights end to end — core, spoke, node, wire, panel.\n\nMethod, Disciplines and The Studio are chips under the lockup. Operating Rhythm is the rail beneath the core. Engagement is the address in the topbar plus the primary button. Nothing was cut.\n\nAll copy comes from the current site. No metrics, logos or testimonials were invented."
+    },
+    {
+      "id": "note-boot",
+      "x": 1560,
+      "y": -320,
+      "w": 700,
+      "text": "ENTRY SEQUENCE — the first 2.2 seconds\n\nThis is what makes it feel like an HQ rather than a homepage. The mark draws, the rings resolve, the console reports what loaded, then the panels assemble at the perimeter.\n\nIt loops on the canvas so you can watch it. In the real build it plays once per session, and is skipped entirely under prefers-reduced-motion."
+    },
+    {
+      "id": "note-mobile",
+      "x": 0,
+      "y": 1960,
+      "w": 390,
+      "text": "MOBILE — 390 x 844\n\nSame sphere and the same six nodes in two arcs, at 320 points. Below the core the six capabilities stack as a list; dialogs are bottom sheets.\n\nAll hit targets are 44px+. No fake status bar or keyboard — the real ones render on top."
+    },
+    {
+      "id": "note-system",
+      "x": 1490,
+      "y": 1060,
+      "w": 420,
+      "text": "SYSTEM SHEET\n\nThe detailed plan: palette, type ramp, grid and panel anatomy, dialog spec, which existing three.js piece carries over to what, and the build order against the actual files in the repo.\n\nSection 07 has the five decisions I need from you. The SEO one is the only one that can quietly cost you something."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

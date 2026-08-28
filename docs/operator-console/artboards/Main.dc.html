@@ -1,0 +1,684 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; background: #050b09; }
+    .hq * { box-sizing: border-box; }
+    .hq { position: relative; width: 1440px; height: 900px; overflow: hidden; background: #050b09; color: #f3f0e7;
+          font-family: "Plus Jakarta Sans", "Helvetica Neue", sans-serif; }
+    .hq a { color: var(--ac); text-decoration: none; }
+    .hq a:hover { color: #f3f0e7; }
+    .hq button { font: inherit; color: inherit; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+
+    .bg { position: absolute; inset: 0; pointer-events: none;
+          background:
+            radial-gradient(120% 90% at 50% 46%, rgba(199,163,90,.07), transparent 62%),
+            radial-gradient(80% 60% at 8% 8%, rgba(52,211,153,.05), transparent 60%),
+            linear-gradient(#0a1512, #050b09 60%); }
+    .bg:after { content: ""; position: absolute; inset: 0; opacity: .5;
+      background-image: linear-gradient(rgba(199,163,90,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(199,163,90,.055) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(120% 90% at 50% 46%, black, transparent 72%); }
+    .aura { position: absolute; left: 0; top: 0; width: 760px; height: 760px; margin: -380px 0 0 -380px; pointer-events: none; z-index: 0; opacity: 0;
+            background: radial-gradient(circle, rgba(199,163,90,.09), rgba(199,163,90,.03) 42%, transparent 68%); transition: opacity .6s ease; }
+
+    .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+    .lab { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #6a7a72; }
+    .disp { font-family: "Plus Jakarta Sans", "Helvetica Neue", sans-serif; font-weight: 600; letter-spacing: -.03em; }
+    .mk { display: inline-grid; grid-template-columns: 3px 3px 3px; gap: 2px; align-items: end; height: 16px; }
+    .mk i { display: block; background: var(--ac); }
+    /* logotype — <Bespoke/> ; brand green #008F64, lifted to --br for the dark ground */
+    .logo { font-family: "Plus Jakarta Sans", "Helvetica Neue", sans-serif; font-weight: 600; letter-spacing: -.03em; color: #f3f0e7; line-height: 1; white-space: nowrap; display: inline-block; }
+    .logo b { color: var(--br); font-weight: 600; font-size: 1em; letter-spacing: .01em; }
+    .logo i { font-style: normal; color: var(--br); font-weight: 600; font-size: .94em; padding: 0 .03em; }
+    .logo-sub { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 300; letter-spacing: .6em; margin-right: -.6em; text-transform: lowercase; color: #7f8f86; }
+
+    .topbar { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 22px; border-bottom: 1px solid rgba(199,163,90,.13); }
+    .grid { position: relative; z-index: 2; display: grid; grid-template-columns: 280px minmax(0,1fr) 290px; gap: 18px; padding: 18px 22px 22px; height: 854px; }
+    .col { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+
+    /* ---- wiring layer: node -> the panel that owns it ---- */
+    .traces { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    @keyframes dash { to { stroke-dashoffset: -300; } }
+    .sig { stroke-dasharray: 8 52; animation: dash 2.2s linear infinite; }
+    .hq[data-motion="off"] .sig { animation: none; }
+
+    /* ---- capability panel ---- */
+    .panel { position: relative; display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%;
+             border: 1px solid rgba(199,163,90,.15); background: rgba(7,15,13,.8); transition: border-color .25s ease, background .25s ease; }
+    .panel:before { content: ""; position: absolute; left: -1px; top: -1px; width: 9px; height: 9px; border-left: 1px solid var(--ac); border-top: 1px solid var(--ac); opacity: .7; }
+    .panel.on { border-color: rgba(52,211,153,.45); background: rgba(9,20,17,.9); }
+    .panel.on .pnum { color: var(--lv); }
+    .panel.on .parw { color: var(--lv); transform: translate(2px,-2px); }
+    .phead { display: flex; align-items: center; gap: 10px; padding: 11px 13px 10px; border-bottom: 1px solid rgba(199,163,90,.13); }
+    .pnum { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #55655c; transition: color .25s ease; }
+    .pname { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 600; letter-spacing: -.025em; font-size: 16.5px; line-height: 1; color: #f3f0e7; }
+    .parw { margin-left: auto; color: #43514a; font-size: 12px; transition: .2s ease; }
+    .pshort { padding: 9px 13px 8px; font-size: 10.5px; line-height: 1.45; color: #6f7f76; border-bottom: 1px solid rgba(199,163,90,.08); }
+    .plist { flex: 1; min-height: 0; overflow: hidden; padding: 3px 0; }
+    .prow { display: grid; grid-template-columns: 13px minmax(0,1fr); gap: 9px; align-items: baseline; padding: 8px 13px; font-size: 11px; line-height: 1.35; color: #b8c5bc; }
+    .prow span { color: var(--ac); font-size: 8px; }
+    .panel.on .prow span { color: var(--lv); }
+    .pfoot { display: flex; align-items: center; justify-content: space-between; padding: 8px 13px 9px; border-top: 1px solid rgba(199,163,90,.08); }
+
+    /* ---- the core ---- */
+    .stage { position: relative; flex: 1; min-height: 0; }
+    .ringbox { position: absolute; inset: 0; width: 790px; height: 566px; perspective: 1500px; }
+    .ringtilt { position: absolute; inset: 0; will-change: transform; }
+    .core-cv { position: absolute; inset: 0; width: 790px; height: 566px; pointer-events: none; }
+    .pulse { animation: pl 7s ease-in-out infinite; }
+    @keyframes rot { to { transform: rotate(360deg); } }
+    @keyframes pl { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    .hq[data-motion="off"] .pulse { animation: none; }
+
+    .node { position: absolute; width: 116px; margin: -33px 0 0 -58px; display: grid; justify-items: center; gap: 9px; }
+    .node .disc { width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(199,163,90,.34); background: rgba(5,11,9,.92); display: grid; place-items: center; transition: .22s ease; }
+    .node .disc .mk { grid-template-columns: 4px 4px 4px; gap: 3px; }
+    .node:hover .disc, .node.on .disc { border-color: var(--lv); box-shadow: 0 0 0 6px rgba(52,211,153,.10), 0 0 30px rgba(52,211,153,.32); transform: scale(1.07); }
+    .node:hover .mk i, .node.on .mk i { background: var(--lv); }
+    .node .nm { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #a2b2a8; white-space: nowrap; }
+    .node:hover .nm, .node.on .nm { color: #f3f0e7; }
+
+    .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(199,163,90,.26); padding: 6px 10px; font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: #cbbf9e; cursor: pointer; }
+    .chip:hover { border-color: var(--ac); color: #f3f0e7; background: rgba(199,163,90,.07); }
+    .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--ac); color: #071a15; padding: 13px 18px; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
+    .btn:hover { background: #f3f0e7; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(199,163,90,.3); color: #cbbf9e; padding: 13px 18px; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
+    .btn-ghost:hover { border-color: var(--ac); color: #f3f0e7; }
+
+    /* ---- rhythm rail ---- */
+    .rail { display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; }
+    .ph { position: relative; padding: 0 8px; text-align: left; cursor: pointer; }
+    .ph:before { content: ""; position: absolute; left: 8px; right: 8px; top: 5px; height: 1px; background: rgba(199,163,90,.2); }
+    .ph i { position: absolute; left: 8px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: #24322c; border: 1px solid rgba(199,163,90,.4); }
+    .ph.live i { background: var(--lv); border-color: var(--lv); box-shadow: 0 0 10px rgba(52,211,153,.6); }
+    .ph:hover i { border-color: var(--lv); }
+    .ph b { display: block; margin-top: 17px; font-family: "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 400; letter-spacing: .06em; color: #d6e0d8; }
+    .ph em { display: block; margin-top: 4px; font-style: normal; font-size: 9.5px; line-height: 1.4; color: #6f7f76; }
+
+    /* ---- dialog ---- */
+    .scrim { position: absolute; inset: 0; background: rgba(3,7,6,.78); backdrop-filter: blur(9px); z-index: 40; }
+    .dialog { position: absolute; z-index: 41; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 792px; max-height: 700px;
+              border: 1px solid rgba(199,163,90,.3); background: #071110; box-shadow: 0 40px 120px rgba(0,0,0,.6); display: flex; flex-direction: column; }
+    .dialog:before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--ac); }
+    .dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+  </style>
+</helmet>
+
+<div class="hq" style="--ac: {{accent}}; --lv: {{live}}; --br: {{brand}};" data-motion="{{motionAttr}}" id="bx-hq">
+  <div class="bg"></div>
+  <div class="aura" id="bx-aura"></div>
+
+  <svg class="traces" viewBox="0 0 1440 900" aria-hidden="true">
+    <sc-for list="{{traces}}" as="t" hint-placeholder-count="6">
+      <g>
+        <path d="{{t.d}}" fill="none" stroke="{{t.stroke}}" stroke-width="{{t.w}}" opacity="{{t.op}}"></path>
+        <path class="sig" d="{{t.d}}" fill="none" stroke="{{live}}" stroke-width="1.4" opacity="{{t.sigOp}}"></path>
+        <circle cx="{{t.px}}" cy="{{t.py}}" r="{{t.pr}}" fill="{{t.stroke}}" opacity="{{t.dotOp}}"></circle>
+      </g>
+    </sc-for>
+  </svg>
+
+  <header class="topbar">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <span class="logo" style="font-size: 17px;"><b>&lt;</b>Bespoke<i>/</i><b>&gt;</b></span>
+      <span class="logo-sub" style="font-size: 8px;">applications labs</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 22px;">
+      <a href="mailto:hello@bespokelabs.dev" class="mono" style="font-size: 10.5px; letter-spacing: .04em;">hello@bespokelabs.dev ↗</a>
+      <span class="lab" style="display: flex; align-items: center; gap: 7px;">
+        <span class="pulse" style="width: 5px; height: 5px; background: {{live}}; display: inline-block; border-radius: 50%;"></span>
+        Console live
+      </span>
+      <span class="lab">{{date}}</span>
+      <span class="mono" style="font-size: 12px; letter-spacing: .1em; color: #f3f0e7;">{{clock}}</span>
+      <span class="lab">SAST</span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <div class="col">
+      <sc-for list="{{leftPanels}}" as="p" hint-placeholder-count="3">
+        <button type="button" class="panel {{p.cls}}" onClick="{{ p.open }}" onMouseEnter="{{ p.hot }}" onMouseLeave="{{ cool }}">
+          <span class="phead">
+            <span class="mk" style="height: 13px;"><i style="height: {{p.b1}}px"></i><i style="height: {{p.b2}}px"></i><i style="height: {{p.b3}}px"></i></span>
+            <span class="pnum">{{p.n}}</span>
+            <span class="pname">{{p.name}}</span>
+            <span class="parw">↗</span>
+          </span>
+          <span class="pshort">{{p.short}}</span>
+          <span class="plist">
+            <sc-for list="{{p.items}}" as="it" hint-placeholder-count="4">
+              <span class="prow"><span>◆</span>{{it.t}}</span>
+            </sc-for>
+          </span>
+          <span class="pfoot">
+            <span class="lab">{{p.meta}}</span>
+            <span class="lab" style="color: #cbbf9e;">Open ↗</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+
+    <div class="col" style="gap: 0;">
+
+      <div style="text-align: center; padding: 6px 0 0; height: 130px;">
+        <div class="lab" style="display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 11px;">
+          <span style="width: 24px; height: 1px; background: rgba(199,163,90,.4); display: inline-block;"></span>
+          Operator console — v3
+          <span style="width: 24px; height: 1px; background: rgba(199,163,90,.4); display: inline-block;"></span>
+        </div>
+        <h1 class="logo" style="margin: 0; font-size: 50px;"><b>&lt;</b>Bespoke<i>/</i><b>&gt;</b></h1>
+        <div class="logo-sub" style="font-size: 11.5px; margin-top: 9px;">applications labs</div>
+        <div style="display: flex; justify-content: center; gap: 8px; margin-top: 13px;">
+          <button type="button" class="chip" onClick="{{ openStudio }}" onMouseEnter="{{ onStudio }}" onMouseLeave="{{ cool }}">The studio</button>
+          <button type="button" class="chip" onClick="{{ openMethod }}" onMouseEnter="{{ onMethod }}" onMouseLeave="{{ cool }}">Method</button>
+          <button type="button" class="chip" onClick="{{ openDisc }}" onMouseEnter="{{ onDisc }}" onMouseLeave="{{ cool }}">Disciplines</button>
+        </div>
+      </div>
+
+      <div class="stage">
+       <div class="ringbox">
+        <div class="ringtilt" id="bx-tilt">
+        <canvas class="core-cv" id="bx-core" width="790" height="566"></canvas>
+        <sc-for list="{{nodes}}" as="n" hint-placeholder-count="6">
+          <button type="button" class="node {{n.cls}}" style="left: {{n.left}}; top: {{n.top}};" onClick="{{ n.open }}" onMouseEnter="{{ n.hot }}" onMouseLeave="{{ cool }}">
+            <span class="disc">
+              <span class="mk" style="height: 23px;"><i style="height: {{n.b1}}px"></i><i style="height: {{n.b2}}px"></i><i style="height: {{n.b3}}px"></i></span>
+            </span>
+            <span class="nm">{{n.name}}</span>
+          </button>
+        </sc-for>
+        </div>
+       </div>
+      </div>
+
+      <div style="height: 118px; display: flex; flex-direction: column; gap: 9px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <span class="lab">Operating rhythm</span>
+          <span style="flex: 1; height: 1px; background: rgba(199,163,90,.14);"></span>
+          <span class="lab">Every build runs this way</span>
+        </div>
+        <div class="rail">
+          <sc-for list="{{phases}}" as="f" hint-placeholder-count="4">
+            <button type="button" class="ph {{f.cls}}" onClick="{{ openRhythm }}" onMouseEnter="{{ onRhythm }}" onMouseLeave="{{ cool }}">
+              <i></i><b>{{f.n}} {{f.name}}</b><em>{{f.focus}}</em>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 2px;">
+          <button type="button" class="btn" onClick="{{ openContact }}">Start a build <span style="font-size: 13px;">↘</span></button>
+          <button type="button" class="btn-ghost" onClick="{{ openStudio }}">How we work</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col">
+      <sc-for list="{{rightPanels}}" as="p" hint-placeholder-count="3">
+        <button type="button" class="panel {{p.cls}}" onClick="{{ p.open }}" onMouseEnter="{{ p.hot }}" onMouseLeave="{{ cool }}">
+          <span class="phead">
+            <span class="mk" style="height: 13px;"><i style="height: {{p.b1}}px"></i><i style="height: {{p.b2}}px"></i><i style="height: {{p.b3}}px"></i></span>
+            <span class="pnum">{{p.n}}</span>
+            <span class="pname">{{p.name}}</span>
+            <span class="parw">↗</span>
+          </span>
+          <span class="pshort">{{p.short}}</span>
+          <span class="plist">
+            <sc-for list="{{p.items}}" as="it" hint-placeholder-count="4">
+              <span class="prow"><span>◆</span>{{it.t}}</span>
+            </sc-for>
+          </span>
+          <span class="pfoot">
+            <span class="lab">{{p.meta}}</span>
+            <span class="lab" style="color: #cbbf9e;">Open ↗</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{dialogOpen}}" hint-placeholder-val="{{true}}">
+    <div class="scrim" onClick="{{ close }}"></div>
+    <div class="dialog">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 17px 24px 15px; border-bottom: 1px solid rgba(199,163,90,.16);">
+        <span class="mono" style="font-size: 10px; color: {{accent}}; letter-spacing: .18em;">{{dlg.kicker}}</span>
+        <span style="flex: 1; height: 1px; background: rgba(199,163,90,.16);"></span>
+        <button type="button" class="lab" style="letter-spacing: .18em;" onClick="{{ close }}">Close ✕</button>
+      </div>
+      <div style="padding: 28px 34px 30px; overflow-y: auto;">
+        <h2 class="disp" style="margin: 0; font-size: 33px; line-height: 1.08; color: #f3f0e7; max-width: 580px;">{{dlg.title}}</h2>
+        <p style="margin: 16px 0 0; font-size: 14.5px; line-height: 1.65; color: #a4b3aa; max-width: 620px;">{{dlg.body}}</p>
+        <div class="dgrid" style="margin-top: 30px;">
+          <div>
+            <div class="lab" style="padding-bottom: 10px; border-bottom: 1px solid rgba(199,163,90,.16);">{{dlg.aLabel}}</div>
+            <sc-for list="{{dlg.items}}" as="it" hint-placeholder-count="4">
+              <div style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(199,163,90,.07); font-size: 12.5px; color: #b8c5bc;">
+                <span style="color: {{live}}; font-size: 9px; line-height: 1.7;">◆</span>{{it.t}}
+              </div>
+            </sc-for>
+          </div>
+          <div>
+            <div class="lab" style="padding-bottom: 10px; border-bottom: 1px solid rgba(199,163,90,.16);">{{dlg.bLabel}}</div>
+            <p style="margin: 14px 0 0; font-size: 12.5px; line-height: 1.7; color: #93a29a;">{{dlg.bText}}</p>
+            <sc-if value="{{dlg.isContact}}" hint-placeholder-val="{{false}}">
+              <div style="display: grid; gap: 9px; margin-top: 16px;">
+                <input placeholder="Name" style="background: rgba(243,240,231,.03); border: 1px solid rgba(199,163,90,.2); color: #f3f0e7; padding: 11px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+                <input placeholder="Work email" style="background: rgba(243,240,231,.03); border: 1px solid rgba(199,163,90,.2); color: #f3f0e7; padding: 11px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+                <textarea placeholder="What keeps breaking?" rows="3" style="background: rgba(243,240,231,.03); border: 1px solid rgba(199,163,90,.2); color: #f3f0e7; padding: 11px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; resize: none;"></textarea>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 13px; margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(199,163,90,.16);">
+          <button type="button" class="btn" onClick="{{ openContact }}">{{dlg.cta}} <span style="font-size: 13px;">↗</span></button>
+          <button type="button" class="btn-ghost" onClick="{{ close }}">Back to console</button>
+          <span class="lab" style="margin-left: auto;">Esc closes · {{dlg.kicker}}</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#c7a35a","options":["#c7a35a","#f97316","#34d399","#a78bfa"],"section":"Palette"},"live":{"editor":"color","default":"#34d399","options":["#34d399","#4ecdc4","#f59e0b"],"section":"Palette"},"brand":{"editor":"color","default":"#00B87E","options":["#00B87E","#008F64","#34d399"],"section":"Palette"},"core":{"editor":"range","default":2,"min":1,"max":2.2,"step":0.05,"section":"Core"},"motion":{"editor":"boolean","default":true,"section":"Palette"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: null, hot: null, clock: "--:--:--", date: "" };
+  }
+
+  componentDidMount() {
+    this.tick();
+    this._t = setInterval(() => this.tick(), 1000);
+    this._mx = 0; this._my = 0; this._rx = 0; this._ry = 0; this._t0 = Date.now();
+    this._onMove = (e) => this.onMove(e);
+    this._onLeave = () => { this._mx = 0; this._my = 0; this.aura(0); };
+    window.addEventListener("mousemove", this._onMove, { passive: true });
+    window.addEventListener("mouseout", this._onLeave, { passive: true });
+    this.boot(0);
+  }
+
+  componentWillUnmount() {
+    this._dead = true;
+    if (this._t) clearInterval(this._t);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    window.removeEventListener("mousemove", this._onMove);
+    window.removeEventListener("mouseout", this._onLeave);
+  }
+
+  tick() {
+    const d = new Date(), z = { timeZone: "Africa/Johannesburg" };
+    this.setState({
+      clock: new Intl.DateTimeFormat("en-GB", Object.assign({ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }, z)).format(d),
+      date: new Intl.DateTimeFormat("en-GB", Object.assign({ weekday: "short", day: "2-digit", month: "short", year: "numeric" }, z)).format(d).toUpperCase()
+    });
+  }
+
+  rand() {
+    this._s = ((this._s || 1337) * 1664525 + 1013904223) % 4294967296;
+    return this._s / 4294967296;
+  }
+
+  /* ---------- geometry ----------
+     Six nodes in two arcs of three, so each one faces the panel that owns it.
+     Ring box is 690 x 552; console space is 1440 x 900 at 1:1. */
+  ANG() { return [210, 180, 150, 330, 0, 30]; }
+  NR() { return 330; }
+  RC() { return [715, 477]; }
+  BOX() { return [790, 566, 395, 283]; }
+
+  nodeXY(i) {
+    const a = this.ANG()[i] * Math.PI / 180;
+    return [Math.cos(a) * this.NR(), Math.sin(a) * this.NR()];
+  }
+
+  ports() {
+    // three panels a side, flex:1 in an 814px column with two 16px gaps
+    const h = (814 - 32) / 3, top = 64;
+    const y = [top + 23, top + h + 16 + 23, top + 2 * (h + 16) + 23];
+    return [
+      { x: 302, y: y[0], s: 1 }, { x: 302, y: y[1], s: 1 }, { x: 302, y: y[2], s: 1 },
+      { x: 1128, y: y[0], s: -1 }, { x: 1128, y: y[1], s: -1 }, { x: 1128, y: y[2], s: -1 }
+    ];
+  }
+
+  /* ---------- the sphere ---------- */
+  boot(n) {
+    if (this._dead) return;
+    const cv = document.getElementById("bx-core");
+    if (!cv) {
+      if (n > 180) return;
+      this._raf = requestAnimationFrame(() => this.boot(n + 1));
+      return;
+    }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = 790 * dpr; cv.height = 566 * dpr;
+    this._ctx = cv.getContext("2d");
+    this._ctx.scale(dpr, dpr);
+    this._pts = this.buildField();
+    this._tilt = document.getElementById("bx-tilt");
+    this._au = document.getElementById("bx-aura");
+    this._hq = document.getElementById("bx-hq");
+    this.frame();
+  }
+
+  buildField() {
+    const out = [], GA = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < 360; i++) {
+      const y = 1 - (i / 359) * 2, r = Math.sqrt(Math.max(0, 1 - y * y)), th = i * GA, j = 0.97 + this.rand() * 0.06;
+      out.push({ x: Math.cos(th) * r * j, y: y * j, z: Math.sin(th) * r * j,
+                 s: 0.5 + this.rand() * 0.7, a: 0.28 + this.rand() * 0.34,
+                 c: this.rand() > 0.82 ? 2 : 0, ph: this.rand() * 6.28, sp: 0.4 + this.rand() * 0.5 });
+    }
+    for (let i = 0; i < 240; i++) {
+      const u = this.rand() * 2 - 1, th = this.rand() * Math.PI * 2, r = Math.pow(this.rand(), 0.55) * 0.7, w = Math.sqrt(Math.max(0, 1 - u * u));
+      out.push({ x: Math.cos(th) * w * r, y: u * r, z: Math.sin(th) * w * r,
+                 s: 0.6 + this.rand() * 1.1, a: 0.34 + this.rand() * 0.5,
+                 c: this.rand() > 0.72 ? 1 : (this.rand() > 0.5 ? 2 : 0), ph: this.rand() * 6.28, sp: 0.7 + this.rand() * 1.3 });
+    }
+    for (let i = 0; i < 16; i++) {
+      const u = this.rand() * 2 - 1, th = this.rand() * Math.PI * 2, r = 0.3 + this.rand() * 0.55, w = Math.sqrt(Math.max(0, 1 - u * u));
+      out.push({ x: Math.cos(th) * w * r, y: u * r, z: Math.sin(th) * w * r,
+                 s: 1.5 + this.rand() * 1.1, a: 0.6 + this.rand() * 0.35, c: 1, ph: this.rand() * 6.28, sp: 1.4 + this.rand() * 1.2 });
+    }
+    return out;
+  }
+
+  rgb(hex) {
+    const h = (hex || "").replace("#", "");
+    if (h.length !== 6) return [199, 163, 90];
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+
+  onMove(e) {
+    if (!this._hq) return;
+    const r = this._hq.getBoundingClientRect();
+    if (!r.width) return;
+    this._mx = ((e.clientX - r.left) / r.width) * 2 - 1;
+    this._my = ((e.clientY - r.top) / r.height) * 2 - 1;
+    this.aura(1, e.clientX - r.left, e.clientY - r.top);
+  }
+
+  aura(on, x, y) {
+    if (!this._au) return;
+    if (on) this._au.style.transform = "translate(" + x + "px," + y + "px)";
+    this._au.style.opacity = on ? "1" : "0";
+  }
+
+  frame() {
+    if (this._dead || !this._ctx) return;
+    const live = (this.props.motion ?? true), held = !!this.state.open;
+    if (live) {
+      const k = held ? 0.02 : 0.075;
+      this._rx += ((held ? 0 : -this._my * 0.34) - this._rx) * k;
+      this._ry += ((held ? 0 : this._mx * 0.46) - this._ry) * k;
+      if (!held) this._spin = (this._spin || 0) + 0.0019;
+    }
+    this.paint((Date.now() - this._t0) / 1000, this._spin || 0, this._rx, this._ry, live && !held, this.state.open || this.state.hot);
+    if (this._tilt) {
+      this._tilt.style.transform = "rotateY(" + (this._ry * 11).toFixed(2) + "deg) rotateX(" + (-this._rx * 9).toFixed(2) + "deg)";
+    }
+    this._raf = requestAnimationFrame(() => this.frame());
+  }
+
+  paint(t, spin, rx, ry, breathing, active) {
+    const ctx = this._ctx, B = this.BOX(), W = B[0], H = B[1], C = B[2], CY = B[3];
+    const NR = this.NR();
+    const scale = this.props.core ?? 2;
+    const R = 126 * scale * (breathing ? 1 + Math.sin(t * 0.55) * 0.03 : 1);
+    const AC = this.rgb(this.props.accent ?? "#c7a35a"), LV = this.rgb(this.props.live ?? "#34d399"), PP = [243, 240, 231];
+    const cols = [AC, LV, PP];
+    const ai = this.data().map((m) => m.id).indexOf(active);
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "lighter";
+
+    const g = ctx.createRadialGradient(C, CY, 0, C, CY, R * 1.35);
+    g.addColorStop(0, "rgba(" + LV[0] + "," + LV[1] + "," + LV[2] + ",.09)");
+    g.addColorStop(0.34, "rgba(" + AC[0] + "," + AC[1] + "," + AC[2] + ",.05)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    /* two arcs, one behind each bank of panels — a full ring will not fit the frame */
+    const D = Math.PI / 180, arcs = [[138 * D, 222 * D], [-42 * D, 42 * D]];
+    ctx.lineCap = "butt";
+    for (let k = 0; k < 2; k++) {
+      ctx.strokeStyle = "rgba(" + AC[0] + "," + AC[1] + "," + AC[2] + ",.2)";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(C, CY, NR, arcs[k][0], arcs[k][1]); ctx.stroke();
+      ctx.setLineDash([2, 24]);
+      ctx.lineDashOffset = breathing ? -(t * 9) % 26 : 0;
+      ctx.strokeStyle = "rgba(" + LV[0] + "," + LV[1] + "," + LV[2] + ",.2)";
+      ctx.beginPath(); ctx.arc(C, CY, NR, arcs[k][0], arcs[k][1]); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    /* spokes: sphere surface out to each capability node */
+    ctx.lineCap = "round";
+    const s0 = Math.min(R * 1.06, NR - 96), s1 = NR - 40;
+    for (let i = 0; i < 6; i++) {
+      const p = this.nodeXY(i), L = Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+      const ux = p[0] / L, uy = p[1] / L;
+      const x0 = C + ux * s0, y0 = CY + uy * s0, x1 = C + ux * s1, y1 = CY + uy * s1;
+      const on = i === ai, c = on ? LV : AC;
+      ctx.strokeStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + (on ? 0.6 : (ai >= 0 ? 0.07 : 0.17)) + ")";
+      ctx.lineWidth = on ? 1.5 : 0.85;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      if (on) {
+        const u = (t * 0.55) % 1, hx = x0 + (x1 - x0) * u, hy = y0 + (y1 - y0) * u;
+        const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 14);
+        hg.addColorStop(0, "rgba(" + LV[0] + "," + LV[1] + "," + LV[2] + ",.55)");
+        hg.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, 14, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = "rgba(243,240,231,.9)";
+        ctx.beginPath(); ctx.arc(hx, hy, 2.1, 0, 6.2832); ctx.fill();
+      }
+    }
+
+    /* the core */
+    const yaw = spin + ry, pitch = rx;
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), cx = Math.cos(pitch), sx = Math.sin(pitch);
+    const pts = this._pts, dim = active ? 0.78 : 1;
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      const puff = 1 + Math.sin(t * p.sp + p.ph) * 0.045;
+      const px = p.x * puff, py = p.y * puff, pz = p.z * puff;
+      const x1 = px * cy - pz * sy, z1 = px * sy + pz * cy;
+      const y1 = py * cx - z1 * sx, z2 = py * sx + z1 * cx;
+      const d = 2.9 / (2.9 + z2), c = cols[p.c];
+      const al = p.a * dim * (0.22 + 0.78 * (d - 0.62) / 0.55) * (p.c === 1 ? 0.65 + 0.35 * Math.sin(t * p.sp + p.ph) : 1);
+      if (al <= 0.01) continue;
+      ctx.fillStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + (al < 1 ? al.toFixed(3) : 1) + ")";
+      ctx.beginPath();
+      ctx.arc(C + x1 * R * d, CY + y1 * R * d, Math.max(0.35, p.s * d * Math.min(1.5, scale * 0.72)), 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  /* ---------- content ---------- */
+  data() {
+    return [
+      { id: "apps", n: "01", name: "Applications", short: "Web platforms, mobile products and internal tools, shaped around how the work really moves.",
+        b1: 5, b2: 13, b3: 8, meta: "Product layer",
+        title: "The product your operation actually runs on.",
+        body: "Web platforms, mobile products and internal tools shaped around how the work really moves — not around a template. Built to be opened every morning by the people who do the job, and to still make sense in year three.",
+        aLabel: "What it covers", bLabel: "Typical shape",
+        items: [{ t: "Product design and front-end" }, { t: "Application and API engineering" }, { t: "Internal tools, admin and reporting" }, { t: "Deployment, monitoring and handover" }],
+        bText: "Most start as one painful workflow and grow into the system that replaces it. We ship the first useful slice early, then widen it." },
+      { id: "agents", n: "02", name: "Agent Systems", short: "AI operators that act inside the business rather than chatting beside it.",
+        b1: 13, b2: 6, b3: 10, meta: "Intelligence layer",
+        title: "Operators that do the work, with a human on the brake.",
+        body: "AI that acts inside your business rather than chatting beside it: reading the inbox, scoring the lead, drafting the reply, updating the record. Every consequential step keeps an explicit approval point.",
+        aLabel: "What it covers", bLabel: "Where it earns its place",
+        items: [{ t: "Triage, scoring and routing pipelines" }, { t: "Drafting and review agent pairs" }, { t: "Tool use against your real systems" }, { t: "Approval queues and audit trails" }],
+        bText: "Where a person repeats the same judgement dozens of times a week. We automate the repetition and keep the judgement." },
+      { id: "media", n: "03", name: "Media Engine", short: "Creative production as a pipeline, with brand rules living in the system.",
+        b1: 8, b2: 11, b3: 13, meta: "Creative layer",
+        title: "Creative output as a production line, not a scramble.",
+        body: "Generation, review and publishing wired into one pipeline so campaign work stops depending on who happens to be free. Brand rules live in the system, not in a shared folder nobody opens.",
+        aLabel: "What it covers", bLabel: "Typical shape",
+        items: [{ t: "Generative image and video pipelines" }, { t: "Brand and template systems" }, { t: "Review, approval and versioning" }, { t: "Scheduling and distribution" }],
+        bText: "Teams already producing volume by hand, where the bottleneck is coordination rather than ideas." },
+      { id: "square", n: "04", name: "Town Square", short: "Marketplaces, storefronts and the unglamorous machinery beneath them.",
+        b1: 11, b2: 13, b3: 5, meta: "Commerce layer",
+        title: "The infrastructure under local commerce.",
+        body: "Marketplaces, storefronts and the unglamorous machinery beneath them — listings, payments, fulfilment, disputes. Built for merchants who need it to work on a bad-signal phone on a busy Saturday.",
+        aLabel: "What it covers", bLabel: "Typical shape",
+        items: [{ t: "Multi-merchant marketplace platforms" }, { t: "Payments, payouts and reconciliation" }, { t: "Catalogue, inventory and fulfilment" }, { t: "Merchant onboarding and support tools" }],
+        bText: "An operator with real supply and real demand who is currently holding both together with spreadsheets and WhatsApp." },
+      { id: "networks", n: "05", name: "Networks", short: "Connectivity for sites where downtime has a cost, monitored and documented.",
+        b1: 6, b2: 9, b3: 13, meta: "Infrastructure layer",
+        title: "Connectivity that does not need a hero to stay up.",
+        body: "Network and infrastructure design for sites where downtime has a cost — offices, schools, venues, multi-branch operations. Monitored continuously, documented properly, recoverable by someone other than us.",
+        aLabel: "What it covers", bLabel: "Typical shape",
+        items: [{ t: "Site survey and network design" }, { t: "Segmentation, access and policy" }, { t: "Monitoring and automated response" }, { t: "Documentation and on-site handover" }],
+        bText: "Multi-site operations where nobody can currently say, with confidence, what is connected to what." },
+      { id: "academy", n: "06", name: "Academy", short: "Practical capability for the people who will run what we build.",
+        b1: 13, b2: 8, b3: 11, meta: "Capability layer",
+        title: "Capability that stays after we leave.",
+        body: "Practical training for the people who will run what we build. Not an AI-hype seminar — the specific tools, habits and judgement your team needs to keep the system improving without us.",
+        aLabel: "What it covers", bLabel: "Typical shape",
+        items: [{ t: "Role-specific AI working sessions" }, { t: "Digital literacy foundations" }, { t: "Internal enablement and documentation" }, { t: "Ongoing office hours" }],
+        bText: "Paired with a build, so the team learns on the system they are about to own rather than on a generic example." }
+    ];
+  }
+
+  phaseData() {
+    return [
+      { n: "01", name: "map", focus: "Where the work actually breaks", live: true },
+      { n: "02", name: "frame", focus: "Scope, approval points, sequence", live: false },
+      { n: "03", name: "build", focus: "Application, operators, infrastructure", live: false },
+      { n: "04", name: "hand over", focus: "Documentation, training, ownership", live: false }
+    ];
+  }
+
+  aux(id) {
+    if (id === "studio") return {
+      kicker: "THE STUDIO", isContact: false, title: "An independent digital systems studio.",
+      body: "Bespoke Applications Labs engineers the applications, AI operators and infrastructure that turn complex businesses into clear, capable systems. We work across the layers that decide whether a business actually moves — product, intelligence, creative, commerce, infrastructure and capability — and we work on the parts that are hard.",
+      aLabel: "How we engage", bLabel: "What we do not do",
+      items: [{ t: "Small senior team, one system at a time" }, { t: "Fixed scope per phase, reviewed at each gate" }, { t: "Your systems, your data, your accounts" }, { t: "Handover documentation as a deliverable" }],
+      bText: "We do not start with a template, a trend, or an AI feature in search of a problem — and we do not leave behind a system that needs us to stay alive.", cta: "Start a build" };
+    if (id === "method") return {
+      kicker: "METHOD", isContact: false, title: "Technology should feel like momentum.",
+      body: "Three principles, in order. We map the real hand-offs before choosing any technology. We design applications, agents and infrastructure as one system rather than a pile of tools. And we finish only when your team can run, explain and extend it without us on the call.",
+      aLabel: "The principles", bLabel: "Why it matters",
+      items: [{ t: "01 — Start where the work breaks" }, { t: "02 — Build the operating advantage" }, { t: "03 — Leave a system that holds" }],
+      bText: "Most failed systems were built to a brief that described the symptom. A pile of tools compounds cost; a system compounds leverage. And a system that only survives with its builder attached is not an asset, it is a dependency.", cta: "Start a build" };
+    if (id === "disciplines") return {
+      kicker: "DISCIPLINES", isContact: false, title: "The stack we actually hold.",
+      body: "Deliberately narrow. We would rather be genuinely excellent across four disciplines that compose into one system than adequate across twenty that do not.",
+      aLabel: "What we run on", bLabel: "Why narrow",
+      items: [{ t: "/product — Next.js, React, TypeScript" }, { t: "/agents — Claude, tool use, approval queues" }, { t: "/infra — Vercel, Postgres, networks" }, { t: "/media — generative pipelines, brand systems" }],
+      bText: "Because the disciplines cross over. The same team that builds the application wires the operator into it and puts it on infrastructure it understands. Nothing is thrown over a wall.", cta: "Start a build" };
+    if (id === "rhythm") return {
+      kicker: "OPERATING RHYTHM", isContact: false, title: "Every build runs the same four phases.",
+      body: "No discovery theatre and no open-ended retainer. Each phase has a fixed scope, a named output and a gate you can stop at.",
+      aLabel: "The phases", bLabel: "What you get at each gate",
+      items: [{ t: "01 map — where the work actually breaks" }, { t: "02 frame — scope, approval points, sequence" }, { t: "03 build — application, operators, infrastructure" }, { t: "04 hand over — documentation, training, ownership" }],
+      bText: "A systems map, then a build plan, then a running system, then a system your team owns. You can walk away after any of them holding something useful.", cta: "Start a build" };
+    return {
+      kicker: "ENGAGEMENT", isContact: true, title: "Bring us the hard part.",
+      body: "Tell us what keeps breaking. The first session is a working one: forty minutes on your actual process, ending with an honest read on whether this is worth building — including when the answer is no.",
+      aLabel: "Bring along", bLabel: "Send it",
+      items: [{ t: "The process that keeps failing" }, { t: "Who touches it, and where it stalls" }, { t: "What it costs you when it does" }, { t: "Anything already built that has to survive" }],
+      bText: "hello@bespokelabs.dev — or use the form. We reply from a person, not a sequence.", cta: "Send it through" };
+  }
+
+  renderVals() {
+    const ac = this.props.accent ?? "#c7a35a";
+    const lv = this.props.live ?? "#34d399";
+    const mods = this.data();
+
+    const open = (id) => () => this.setState({ open: id });
+    const close = () => this.setState({ open: null });
+    const hot = (id) => () => this.setState({ hot: id });
+    const cool = () => this.setState({ hot: null });
+
+    const act = this.state.open || this.state.hot;
+    const ai = mods.map((m) => m.id).indexOf(act);
+
+    const RC = this.RC(), P = this.ports();
+    const traces = mods.map((m, i) => {
+      const xy = this.nodeXY(i);
+      const nx = RC[0] + xy[0], ny = RC[1] + xy[1];
+      const o = P[i], on = i === ai;
+      const qx = o.x + o.s * 100, qy = (o.y + ny) / 2;
+      // stop short of the node disc so the line meets its edge, not its middle
+      const dx = o.x - nx, dy = o.y - ny, L = Math.sqrt(dx * dx + dy * dy) || 1;
+      const sx = nx + dx / L * 40, sy = ny + dy / L * 40;
+      return {
+        d: "M " + sx.toFixed(1) + " " + sy.toFixed(1) + " Q " + qx.toFixed(1) + " " + qy.toFixed(1) + " " + o.x + " " + o.y,
+        px: o.x, py: o.y, pr: on ? 3.6 : 2.4,
+        stroke: on ? lv : ac,
+        w: on ? 1.3 : 0.8,
+        op: on ? 0.62 : (ai >= 0 ? 0.07 : 0.16),
+        dotOp: on ? 1 : 0.4,
+        sigOp: on ? 0.85 : 0
+      };
+    });
+
+    const deco = (m, i) => Object.assign({}, m, {
+      open: open(m.id), hot: hot(m.id), cls: act === m.id ? "on" : ""
+    });
+    const panels = mods.map(deco);
+
+    const nodes = mods.map((m, i) => {
+      const xy = this.nodeXY(i);
+      return {
+        name: m.name,
+        b1: Math.round(m.b1 * 1.75), b2: Math.round(m.b2 * 1.75), b3: Math.round(m.b3 * 1.75),
+        left: (((395 + xy[0]) / 790) * 100).toFixed(2) + "%",
+        top: (((283 + xy[1]) / 566) * 100).toFixed(2) + "%",
+        open: open(m.id), hot: hot(m.id), cls: act === m.id ? "on" : ""
+      };
+    });
+
+    const phases = this.phaseData().map((f) => Object.assign({}, f, { cls: f.live ? "live" : "" }));
+
+    let dlg = null;
+    if (act === this.state.open && this.state.open) {
+      const m = mods.find((x) => x.id === this.state.open);
+      dlg = m
+        ? { kicker: m.n + " / " + m.name.toUpperCase(), isContact: false, title: m.title, body: m.body,
+            aLabel: m.aLabel, bLabel: m.bLabel, items: m.items, bText: m.bText, cta: "Start a build" }
+        : this.aux(this.state.open);
+    }
+
+    return {
+      accent: ac,
+      live: lv,
+      brand: this.props.brand ?? "#00B87E",
+      motionAttr: (this.props.motion ?? true) ? "on" : "off",
+      clock: this.state.clock,
+      date: this.state.date,
+      leftPanels: panels.slice(0, 3),
+      rightPanels: panels.slice(3, 6),
+      nodes: nodes,
+      traces: traces,
+      phases: phases,
+      cool: cool,
+      onStudio: hot("studio"), onMethod: hot("method"), onDisc: hot("disciplines"), onRhythm: hot("rhythm"),
+      openStudio: open("studio"), openMethod: open("method"), openDisc: open("disciplines"),
+      openRhythm: open("rhythm"), openContact: open("contact"),
+      close: close,
+      dialogOpen: !!dlg,
+      dlg: dlg || { kicker: "", title: "", body: "", aLabel: "", bLabel: "", items: [], bText: "", cta: "", isContact: false }
+    };
+  }
+}
+</script>
+</body>
+</html>

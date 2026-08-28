@@ -3,8 +3,8 @@
 import React from "react";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Html, Environment, Text, Float } from "@react-three/drei";
-import { useRef, useMemo, useCallback } from "react";
+import { Html } from "@react-three/drei";
+import { useRef, useCallback } from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
@@ -319,7 +319,7 @@ function ParticleField() {
       pos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 5;
     }
     setPositions(pos);
-  }, []);
+  }, [particleCount]);
 
   useFrame((state) => {
     if (!particlesRef.current) return;

@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; background: #050b09; }
+    .sy * { box-sizing: border-box; }
+    .sy { position: relative; width: 900px; background: #050b09; color: #f3f0e7; padding: 34px 38px 44px;
+          font-family: "Plus Jakarta Sans", "Helvetica Neue", sans-serif; }
+    .sy a { color: #c7a35a; text-decoration: none; }
+    .sy a:hover { color: #f3f0e7; }
+    .lab { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #6a7a72; }
+    .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+    .disp { font-family: "Plus Jakarta Sans", "Helvetica Neue", sans-serif; font-weight: 600; letter-spacing: -.03em; }
+    .mk { display: inline-grid; grid-template-columns: 3px 3px 3px; gap: 2px; align-items: end; height: 16px; }
+    .mk i { display: block; background: #c7a35a; }
+    .sec { margin-top: 40px; }
+    .sechead { display: flex; align-items: baseline; gap: 12px; padding-bottom: 11px; border-bottom: 1px solid rgba(199,163,90,.22); }
+    .sechead h2 { margin: 0; font-size: 23px; color: #f3f0e7; }
+    .note { font-size: 12.5px; line-height: 1.7; color: #93a29a; }
+    .tbl { display: grid; font-size: 11.5px; }
+    .tbl > div { display: contents; }
+    .tr { display: grid; align-items: start; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(199,163,90,.09); }
+    .th { color: #6a7a72; font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid rgba(199,163,90,.22); padding-bottom: 8px; }
+    .sw { height: 54px; border: 1px solid rgba(243,240,231,.1); }
+    .card { border: 1px solid rgba(199,163,90,.16); background: rgba(243,240,231,.016); padding: 14px 15px; }
+    code { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: #cbbf9e; }
+  </style>
+</helmet>
+
+<div class="sy">
+
+  <div style="display: flex; align-items: center; gap: 11px; padding-bottom: 26px; border-bottom: 1px solid rgba(199,163,90,.22);">
+    <span class="mk"><i style="height: 8px"></i><i style="height: 16px"></i><i style="height: 11px"></i></span>
+    <span class="mono" style="font-size: 11px; letter-spacing: .22em; text-transform: uppercase;">Bespoke</span>
+    <span class="lab">Operator console — system sheet</span>
+    <span class="lab" style="margin-left: auto;">v3 · draft 01</span>
+  </div>
+
+  <h1 class="disp" style="margin: 26px 0 0; font-size: 35px; line-height: 1.1;">One page. Nothing scrolls.<br><em style="font-style: italic; color: #c7a35a;">Everything opens in place.</em></h1>
+  <p class="note" style="max-width: 620px; margin: 16px 0 0; font-size: 14px;">The whole site is a single viewport-height console. Six capability panels, a live core, one engagement channel. Selecting anything opens a dialog over the console rather than navigating away — so the visitor never leaves their HQ.</p>
+
+  <!-- PALETTE -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">01</span><h2>Palette</h2><span class="lab" style="margin-left: auto;">Extends the existing brand, does not replace it</span></div>
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 16px;">
+      <sc-for list="{{palette}}" as="c" hint-placeholder-count="5">
+        <div>
+          <div class="sw" style="background: {{c.hex}};"></div>
+          <div class="mono" style="font-size: 10.5px; margin-top: 8px; color: #f3f0e7;">{{c.hex}}</div>
+          <div class="lab" style="margin-top: 4px; letter-spacing: .14em;">{{c.name}}</div>
+          <div style="font-size: 10.5px; line-height: 1.5; color: #6f7f76; margin-top: 5px;">{{c.role}}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p class="note" style="margin-top: 16px;"><b style="color:#f3f0e7; font-weight:400;">Worth flagging:</b> the logo file contains no gold. Its only two colours are <b style="color:#00B87E; font-weight:400;">#008F64</b> green and <b style="color:#f3f0e7; font-weight:400;">#161A22</b> charcoal. The gold carried over from the previous site iteration, and you chose it as the accent before I had the file. It still works — gold chrome around a green mark is a deliberate pairing — but a green-only console is one tweak away if you would rather the site match the mark exactly.</p>
+    <p class="note" style="margin-top: 12px;">Live green is a <b style="color:#34d399; font-weight:400;">state</b>, never decoration — it marks the live clock dot, the current phase, and the focused node. If everything is emerald, nothing is live. Gold carries all chrome: rules, labels, corner ticks, the primary action.</p>
+  </div>
+
+  <!-- TYPE -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">02</span><h2>Type</h2><span class="lab" style="margin-left: auto;">Two faces, three jobs</span></div>
+    <div style="display: grid; gap: 0; margin-top: 12px;">
+      <sc-for list="{{type}}" as="t" hint-placeholder-count="6">
+        <div class="tr" style="grid-template-columns: 300px 132px 1fr;">
+          <div style="font-family: {{t.ff}}; font-size: {{t.px}}; line-height: 1.05; color: #f3f0e7; letter-spacing: {{t.ls}}; font-style: {{t.fs}};">{{t.sample}}</div>
+          <div class="mono" style="font-size: 10px; color: #cbbf9e;">{{t.spec}}</div>
+          <div style="font-size: 11.5px; color: #6f7f76; line-height: 1.5;">{{t.use}}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p class="note" style="margin-top: 14px;">The face was identified by measurement, not by eye: glyph widths, x-height and bracket proportions were taken off the logo file and matched against eight candidates. Plus Jakarta Sans 600 came within 2.7% on every metric, and its native &lt; is 0.668 of cap height against the artwork&#39;s 0.660 — punctuation that close is not a coincidence. Montserrat, the first guess, was 5.9% off and visibly wider; Poppins was never a candidate, its <b style="color:#f3f0e7; font-weight:400;">a</b> is single-storey and the logo&#39;s is double. Tracking is -0.03em on the wordmark and 0.6em on the descender line, both measured.</p>
+    <p class="note" style="margin-top: 12px;">The logo face now carries <b style="color:#f3f0e7; font-weight:400;">everything</b> — logotype, headings, panel names, dialog titles and body copy. The editorial serif that ran the headings in earlier drafts is gone: it was a holdover from the previous site and it made the console read as two brands stacked on each other. Two families remain. Jakarta owns anything a person reads as language; JetBrains Mono owns anything read as data — labels, the clock, slugs, table values. Headings step down about 25% in size from the serif sizes, because a sans at the same pixel height reads noticeably larger.</p>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">03</span><h2>Grid &amp; panel anatomy</h2><span class="lab" style="margin-left: auto;">1440 × 900 reference</span></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+      <div class="card">
+        <div class="lab" style="margin-bottom: 10px;">Console grid</div>
+        <div class="mono" style="font-size: 10.5px; line-height: 1.9; color: #b8c5bc;">
+          page padding &nbsp;&nbsp;22px<br>
+          columns &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;280 · 790 · 290<br>
+          panels &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 a side, flex 1 → 261px<br>
+          gutter / gap &nbsp;&nbsp;&nbsp;18px / 16px<br>
+          topbar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;46px<br>
+          node disc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;66px, label 11px mono<br>
+          nodes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r330 at 150/180/210°, 330/0/30°<br>
+          core &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r252 — 2× radius, 4× area<br>
+          radius &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 — everything is square
+        </div>
+        <p class="note" style="font-size: 11.5px; margin: 12px 0 0;">One panel per capability, three a side — so every panel has exactly one node and one wire. The nodes sit in two arcs of three rather than a full ring, each facing the panel it belongs to. Below 1100px the columns collapse to one and the core shrinks to 210px; below 700px, dialogs become bottom sheets.</p>
+      </div>
+      <div class="card">
+        <div class="lab" style="margin-bottom: 10px;">Panel</div>
+        <div class="mono" style="font-size: 10.5px; line-height: 1.9; color: #b8c5bc;">
+          border &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1px rgba(199,163,90,.15)<br>
+          fill &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rgba(243,240,231,.017)<br>
+          corner tick &nbsp;&nbsp;&nbsp;9px gold, top-left only<br>
+          header &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mark + label + right meta<br>
+          row height &nbsp;&nbsp;&nbsp;&nbsp;58px min (44px hit floor)<br>
+          hover &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fill gold .06 + arrow shift
+        </div>
+        <p class="note" style="font-size: 11.5px; margin: 12px 0 0;">The three-bar mark is the existing <code>.labs-mark</code>. Each capability gets its own bar heights as a signature — that is the icon set. No emoji, no icon library.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOG -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">04</span><h2>Dialog</h2><span class="lab" style="margin-left: auto;">The only navigation the site has</span></div>
+    <div class="tbl" style="margin-top: 14px;">
+      <div class="tr th" style="grid-template-columns: 150px 130px 1fr;"><span>Property</span><span>Value</span><span>Note</span></div>
+      <sc-for list="{{dialog}}" as="d" hint-placeholder-count="7">
+        <div class="tr" style="grid-template-columns: 150px 130px 1fr;">
+          <span style="color: #f3f0e7;">{{d.k}}</span>
+          <span class="mono" style="color: #cbbf9e; font-size: 10.5px;">{{d.v}}</span>
+          <span style="color: #6f7f76; line-height: 1.55;">{{d.n}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p class="note" style="margin-top: 14px;">Carried over from <code>components/product-detail-modal.tsx</code> — same scrim blur, same scale-and-lift entrance, retimed from 500ms to 340ms because it now fires on every interaction rather than once. Rebuild it on <code>@radix-ui/react-dialog</code> (already a dependency) so focus trapping, Esc and scroll-lock come for free.</p>
+  </div>
+
+  <!-- MOTION -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">05</span><h2>Motion carried over</h2><span class="lab" style="margin-left: auto;">Nothing new to install</span></div>
+    <div class="tbl" style="margin-top: 14px;">
+      <div class="tr th" style="grid-template-columns: 168px 196px 1fr;"><span>Existing piece</span><span>Lives in</span><span>New role</span></div>
+      <sc-for list="{{motion}}" as="m" hint-placeholder-count="7">
+        <div class="tr" style="grid-template-columns: 168px 196px 1fr;">
+          <span style="color: #f3f0e7;">{{m.k}}</span>
+          <span class="mono" style="color: #cbbf9e; font-size: 9.5px; word-break: break-all;">{{m.f}}</span>
+          <span style="color: #6f7f76; line-height: 1.55;">{{m.n}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p class="note" style="margin-top: 14px;">The circuit is the whole idea: core → spoke → node → wire → the panel that owns that capability. Hover anywhere on the chain and the whole run lights end to end, so a visitor learns the shape of the studio by moving a mouse. On these artboards the sphere and spokes are drawn with a 2D canvas; in the real build they are three.js, using the existing scene. One <code>&lt;Canvas&gt;</code> fixed behind the console, <code>dpr=[1,1.5]</code>, pointer-events none. It pauses while a dialog is open — the field going still is what makes the dialog feel like it took focus. The existing <code>prefers-reduced-motion</code> block in <code>globals.css</code> stays and gains a rule that drops the canvas to a static frame.</p>
+  </div>
+
+  <!-- BUILD -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">06</span><h2>Build order</h2><span class="lab" style="margin-left: auto;">Against the current repo</span></div>
+    <div class="tbl" style="margin-top: 14px;">
+      <div class="tr th" style="grid-template-columns: 26px 250px 1fr;"><span>#</span><span>File</span><span>Change</span></div>
+      <sc-for list="{{build}}" as="b" hint-placeholder-count="8">
+        <div class="tr" style="grid-template-columns: 26px 250px 1fr;">
+          <span class="mono" style="color: {{b.c}}; font-size: 10px;">{{b.n}}</span>
+          <span class="mono" style="color: #cbbf9e; font-size: 10px; word-break: break-all;">{{b.f}}</span>
+          <span style="color: #6f7f76; line-height: 1.55;">{{b.d}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- DECISIONS -->
+  <div class="sec">
+    <div class="sechead"><span class="lab">07</span><h2>Open decisions</h2><span class="lab" style="margin-left: auto;">Needs your call</span></div>
+    <div style="display: grid; gap: 10px; margin-top: 16px;">
+      <sc-for list="{{open}}" as="o" hint-placeholder-count="5">
+        <div class="card" style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start;">
+          <span class="lab" style="color: #cbbf9e; letter-spacing: .16em;">{{o.k}}</span>
+          <span style="font-size: 12px; line-height: 1.65; color: #93a29a;">{{o.v}}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 18px; border-top: 1px solid rgba(199,163,90,.22); display: flex; justify-content: space-between;">
+    <span class="lab">Bespoke Applications Labs — operator console</span>
+    <span class="lab">hello@bespokelabs.dev</span>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":900,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      palette: [
+        { hex: "#050b09", name: "Ground", role: "Page. Near-black with a forest cast, not pure black." },
+        { hex: "#008F64", name: "Brand green", role: "Sampled from the logo file. The master value, used at full strength on light surfaces." },
+        { hex: "#00B87E", name: "Green on dark", role: "Same hue lifted for the near-black ground. What the logotype renders in." },
+        { hex: "#c7a35a", name: "Gold", role: "All chrome: rules, labels, ticks, primary action. NOT from the logo — see below." },
+        { hex: "#34d399", name: "Live", role: "State only. Clock dot, current phase, lit circuit." },
+        { hex: "#f3f0e7", name: "Paper", role: "Headings and primary text. Existing brand paper." },
+        { hex: "#161A22", name: "Brand dark", role: "Sampled from the logo. The wordmark colour on light surfaces." }
+      ],
+      type: [
+        { sample: "<Bespoke/>", ff: "'Plus Jakarta Sans', sans-serif", fs: "normal", px: "28px", ls: "-.015em", spec: "Jakarta 600 / -.03em", use: "The logotype. Brackets and slash in brand green, wordmark in paper." },
+        { sample: "applications labs", ff: "'Plus Jakarta Sans', sans-serif", fs: "normal", px: "10px", ls: ".6em", spec: "Jakarta 300 / .6em", use: "Logotype descender line. Lowercase, never above 14px." },
+        { sample: "Bring us the hard part.", ff: "'Plus Jakarta Sans', sans-serif", fs: "normal", px: "26px", ls: "-.03em", spec: "Jakarta 600 / -.03em", use: "Dialog titles and display headlines" },
+        { sample: "Agent Systems", ff: "'Plus Jakarta Sans', sans-serif", fs: "normal", px: "17px", ls: "-.025em", spec: "Jakarta 600 / 16.5px", use: "Capability panel names" },
+        { sample: "Operators that act.", ff: "'Plus Jakarta Sans', sans-serif", fs: "normal", px: "14px", ls: "0", spec: "Jakarta 400 / 12–14.5px", use: "Body copy in panels and dialogs" },
+        { sample: "01 / AGENT SYSTEMS", ff: "'JetBrains Mono', monospace", fs: "normal", px: "12px", ls: ".1em", spec: "Mono / 10–12px", use: "Data, clock, slugs, table values" },
+        { sample: "CAPABILITY INDEX", ff: "'JetBrains Mono', monospace", fs: "normal", px: "9px", ls: ".2em", spec: "Mono / 9px / .2em", use: "Every panel label and micro-caption" }
+      ],
+      dialog: [
+        { k: "Width", v: "792px / 100%", n: "Fixed on desktop; full-width bottom sheet under 700px." },
+        { k: "Scrim", v: "rgba(3,7,6,.78)", n: "Plus backdrop-filter blur(9px) — the console stays visible behind it, dimmed." },
+        { k: "Entrance", v: "340ms", n: "scale .96 → 1, translateY 14px → 0, cubic-bezier(.2,.8,.2,1)." },
+        { k: "Accent rule", v: "2px top", n: "Gold hairline across the top edge — the existing modal's signature." },
+        { k: "Dismiss", v: "Esc · scrim · ✕", n: "All three. Focus returns to the row that opened it." },
+        { k: "Field", v: "paused", n: "The three.js field freezes on open and resumes on close." },
+        { k: "URL", v: "?panel=agents", n: "Each dialog gets a shallow-routed query param so it is linkable and back-button works." }
+      ],
+      motion: [
+        { k: "ParticleField", f: "components/v2/atmosphere-scene.tsx", n: "The core sphere: ~620 points — an outer shell, an inner cloud, and sixteen brighter emerald pulses. Now r252: twice the radius, four times the area, with point size scaled up so the cloud does not thin out. 900 points desktop, 300 mobile." },
+        { k: "Cursor parallax", f: "new — no equivalent yet", n: "The sphere and the whole ring lean toward the pointer, eased at 0.075 per frame. Yaw ±0.46 rad, pitch ±0.34; the ring plate tilts ±13deg / ±11deg on top. Everything recentres when the pointer leaves." },
+        { k: "Cursor aura", f: "new — no equivalent yet", n: "A soft gold radial follows the pointer across the whole console at 9% opacity. Cheap, and it is most of what makes the surface feel responsive rather than printed." },
+        { k: "Panel traces", f: "new — SVG, not three.js", n: "Six quadratic curves wire each panel header to the ring, dim gold at 15%. On hover the owning trace goes emerald, a dashed impulse runs it, and a dotted segment carries the signal from the ring into the sphere." },
+        { k: "Spokes", f: "new — canvas, not three.js", n: "Six lines from the sphere surface out to the capability nodes, drawn on the core canvas so they rotate and breathe with it. Dim gold at rest; the active one goes emerald and carries a travelling impulse outward. Mobile drops them — at 390px they would be 10px stubs." },
+        { k: "Ring arcs", f: "new — canvas", n: "Two 84° arcs at r330, one behind each bank of panels, with a slow dashed emerald overlay. A full ring is no longer possible: at r350 it would be cut off top and bottom by the frame, and arcs read better against two columns anyway." },
+        { k: "Node → panel wires", f: "new — SVG over the console", n: "Six quadratic curves from each node to its own panel header, stopping 26px short so they meet the node edge rather than its centre. On hover the owning wire goes emerald with a running dash; the other five drop to 7% so the live circuit is unmistakable." },
+        { k: "DataRings", f: "components/v2/atmosphere-scene.tsx", n: "The concentric orbit rings. Keep the counter-rotation, move to gold hairlines, add the dashed emerald tick ring." },
+        { k: "FloatingDebris", f: "components/v2/monolith-scene.tsx", n: "Ambient drift outside the ring. Drop opacity so it reads as depth, not content." },
+        { k: "CinematicCamera", f: "components/v2/monolith-scene.tsx", n: "Slow parallax on the whole field. Reduce the orbit radius — the console is fixed, the field should breathe, not swing." },
+        { k: "lerp rig", f: "components/v1/floating-cards-scene.tsx", n: "The 0.04 MathUtils.lerp easing becomes the node hover and select transition on the six ring nodes." },
+        { k: "Modal transition", f: "components/product-detail-modal.tsx", n: "Kept as the dialog entrance, retimed 500ms → 340ms." },
+        { k: "Monolith", f: "components/v2/*-scene.tsx", n: "Retired. The ring and core replace it — a monolith reads as an object to look at, the ring reads as a system you are inside." }
+      ],
+      build: [
+        { n: "01", f: "app/globals.css", d: "Replace the .labs-* block with console tokens and panel/dialog primitives. Keep the prefers-reduced-motion block.", c: "#34d399" },
+        { n: "02", f: "components/hq/field.tsx", d: "New. One r3f Canvas merging ParticleField + DataRings + drift. Accepts a paused prop.", c: "#34d399" },
+        { n: "03", f: "components/hq/console.tsx", d: "New. The grid shell, topbar, live clock, and the single open-panel state.", c: "#34d399" },
+        { n: "04", f: "components/hq/panels/", d: "New. Six panels as small presentational components, fed from one content module.", c: "#c7a35a" },
+        { n: "05", f: "components/hq/dialog.tsx", d: "Refactor product-detail-modal.tsx onto @radix-ui/react-dialog. Focus trap, Esc, scroll lock.", c: "#c7a35a" },
+        { n: "06", f: "content/capabilities.ts", d: "New. All copy in one typed module so the panels and dialogs cannot drift apart.", c: "#c7a35a" },
+        { n: "07", f: "app/page.tsx", d: "Render Console. Keep every dialog body in the server-rendered DOM so crawlers see the content.", c: "#c7a35a" },
+        { n: "08", f: "contact-form.tsx · api/send", d: "Reuse as-is inside the engagement dialog; restyle only. The Resend route is untouched.", c: "#6a7a72" },
+        { n: "09", f: "app/v1 · app/v2 · version-toggle", d: "Delete once you sign off. They are untracked scaffolding, not history.", c: "#6a7a72" }
+      ],
+      open: [
+        { k: "Gold vs the mark", v: "The logo is green and charcoal only. Gold came from the previous site, and you picked it as the accent before I had the file. Say the word and it goes to #00B87E for a console that matches the mark exactly — a single tweak, already wired." },
+        { k: "Core size", v: "You asked for 3x. The core is now r252 against the old r126 — twice the radius, four times the area, which is as far as it goes before it overruns the frame and swallows the node ring. A literal 3x radius (r378) is cut off top and bottom and leaves no room for the spokes. There is a Core slider in the tweaks: push it and you can see exactly where it breaks." },
+        { k: "Logo asset", v: "The logotype is set live in Plus Jakarta Sans 600 rather than embedded as the PNG. The file is a white-background raster, so it cannot sit on a near-black console without keying, and live text stays crisp at any size and recolours with the theme. If you have the original vector, that is what should ship." },
+        { k: "Panels are the nav", v: "The six panels are now the six capabilities — one node and one wire each. Method, Disciplines and The Studio moved to chips under the lockup; Operating Rhythm became the rail beneath the core; Engagement is the address in the topbar plus the primary button. Nothing was cut, so say if you want any of it back as a panel." },
+        { k: "SEO / crawlers", v: "A single page with dialog-only content is invisible to crawlers unless the dialog bodies are in the server-rendered DOM. Recommendation: render all six bodies server-side, visually hidden, and have the dialog reveal the existing node rather than mount new content. This is the one decision that can quietly cost you search traffic." },
+        { k: "Deep links", v: "Recommend ?panel=agents shallow routing so a capability can be sent to a client and the back button closes the dialog. Cheap to add now, awkward to retrofit." },
+        { k: "Timezone", v: "The clock is set to Africa/Johannesburg (SAST) on the assumption the studio is South Africa based. Confirm, or swap to the visitor local zone." },
+        { k: "Contact address", v: "hello@bespokelabs.dev is taken from the current site. Confirm it is monitored before this ships." },
+        { k: "Proof", v: "There are deliberately no metrics, logos or testimonials — nothing was invented. If you have real client work that can be named, the studio panel is where it goes, and it will do more than anything else on the page." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
