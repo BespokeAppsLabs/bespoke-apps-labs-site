@@ -20,7 +20,7 @@ export function llmsText(full: boolean): string {
   L.push("");
   L.push(
     "Bespoke Applications Labs is a South Africa based studio working across six layers: product, " +
-    "intelligence, creative, commerce, infrastructure and capability. The site is a single operator " +
+    "intelligence, creative, operations, infrastructure and capability. The site is a single operator " +
     "console — every section below opens as a dialog on the same page, addressable as " +
     "`/?panel=<id>`. There are deliberately no metrics, client logos or testimonials on the site; " +
     "none were verifiable, and none were invented."

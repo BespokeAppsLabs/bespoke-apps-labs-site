@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   keywords: [
     'digital systems studio', 'custom software development', 'AI agents',
-    'AI operators', 'internal tools', 'marketplace infrastructure',
+    'AI operators', 'internal tools', 'AI operating system',
     'network infrastructure', 'AI training for teams', 'South Africa',
     ...PRIMARY_PROVINCES.map((p) => `software development ${p.name}`),
     ...MAJOR_SA_CITIES.slice(0, 12).map((c) => `app development ${c}`),

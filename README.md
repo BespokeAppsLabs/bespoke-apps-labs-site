@@ -1,6 +1,6 @@
 # Bespoke Applications Labs
 
-Public site for Bespoke Applications Labs: a systems studio that builds custom applications, AI operators, media engines, marketplaces, and infrastructure for serious businesses.
+Public site for Bespoke Applications Labs: a systems studio that builds custom applications, AI operators, media engines, BespokeOS, and infrastructure for serious businesses.
 
 ## Design direction
 
@@ -8,7 +8,7 @@ The homepage uses an editorial systems-studio identity rather than a generic sof
 
 - **Palette:** deep forest, emerald/mint, paper, and gold.
 - **Identity:** a geometric Bespoke monogram and technical-drafting details.
-- **Content:** applications, agent systems, media, Town Square, networks, and academy—without fabricated metrics or internal implementation language.
+- **Content:** applications, agent systems, media, BespokeOS, networks, and academy—without fabricated metrics or internal implementation language.
 - **Accessibility:** responsive layout, semantic navigation, visible text contrast, and reduced-motion support.
 
 ## Redesign in progress — Operator Console (v3)

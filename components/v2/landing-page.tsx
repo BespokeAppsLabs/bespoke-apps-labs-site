@@ -8,7 +8,7 @@ import {
   GraduationCap,
   Network,
   ScanLine,
-  ShoppingBag,
+  LayoutGrid,
   Sparkles,
   Workflow,
 } from "lucide-react";
@@ -17,7 +17,7 @@ const capabilities = [
   { number: "01", name: "Applications", detail: "Web platforms, mobile products, internal tools", icon: Command },
   { number: "02", name: "Agent Systems", detail: "AI operators that act across your business", icon: Bot },
   { number: "03", name: "Media Engine", detail: "Creative production systems with AI at the core", icon: Sparkles },
-  { number: "04", name: "Town Square", detail: "Marketplace, retail and local-commerce infrastructure", icon: ShoppingBag },
+  { number: "04", name: "BespokeOS", detail: "One AI operator over the whole business, with a human on every approval", icon: LayoutGrid },
   { number: "05", name: "Networks", detail: "Secure, intelligent infrastructure for serious operations", icon: Network },
   { number: "06", name: "Academy", detail: "Practical AI and digital capability for teams", icon: GraduationCap },
 ];
@@ -78,7 +78,7 @@ function CapabilityIndex() {
       <div className="labs-section-heading">
         <p className="labs-eyebrow"><span /> Capability index</p>
         <h2>Not digital theatre.<br /><i>Working advantage.</i></h2>
-        <p>We work across the layers that determine whether a business moves: product, intelligence, communications, commerce and infrastructure.</p>
+        <p>We work across the layers that determine whether a business moves: product, intelligence, communications, operations and infrastructure.</p>
       </div>
       <div className="labs-capability-list">
         {capabilities.map(({ number, name, detail, icon: Icon }) => (

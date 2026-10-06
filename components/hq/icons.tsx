@@ -1,4 +1,4 @@
-import { Bot, Command, GraduationCap, Network, ShoppingBag, Sparkles } from "lucide-react";
+import { Bot, Command, GraduationCap, LayoutGrid, Network, Sparkles } from "lucide-react";
 import type { ComponentType } from "react";
 
 /* The same icons the current site already uses for these six capabilities
@@ -7,7 +7,7 @@ export const ICONS: Record<string, ComponentType<{ size?: number; strokeWidth?: 
   apps: Command,
   agents: Bot,
   media: Sparkles,
-  square: ShoppingBag,
+  os: LayoutGrid,
   networks: Network,
   academy: GraduationCap,
 };
