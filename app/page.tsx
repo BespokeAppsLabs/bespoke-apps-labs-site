@@ -69,7 +69,7 @@ function StructuredData() {
         alternateName: "Bespoke Labs",
         url: SITE_URL,
         description: SITE_SUMMARY,
-        email: "hello@bespokelabs.dev",
+        email: "info@bespokeapps.co.za",
         /* No street address is asserted — none was provided. Country only. */
         address: { "@type": "PostalAddress", addressCountry: "ZA" },
         areaServed: [

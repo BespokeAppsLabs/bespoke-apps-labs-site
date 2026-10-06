@@ -98,7 +98,7 @@ export function llmsText(full: boolean): string {
   L.push(`${engage.aLabel}:`);
   for (const i of engage.items) L.push(`- ${i}`);
   L.push("");
-  L.push("Contact: hello@bespokelabs.dev");
+  L.push("Contact: info@bespokeapps.co.za");
   L.push("");
   if (!full) {
     L.push("## Optional");

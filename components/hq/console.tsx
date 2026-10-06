@@ -49,7 +49,7 @@ export function Console() {
           <span className="hq-logo-sub">applications labs</span>
         </div>
         <div className="hq-status">
-          <a href="mailto:hello@bespokelabs.dev">hello@bespokelabs.dev ↗</a>
+          <a href="mailto:info@bespokeapps.co.za">info@bespokeapps.co.za ↗</a>
           <span><i />console live</span>
           <Clock />
           <span>SAST</span>

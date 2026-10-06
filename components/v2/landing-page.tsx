@@ -44,7 +44,7 @@ function Header() {
         <a href="#method">Method</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a className="labs-header-cta" href="mailto:hello@bespokelabs.dev">Start a conversation <ArrowUpRight size={15} /></a>
+      <a className="labs-header-cta" href="mailto:info@bespokeapps.co.za">Start a conversation <ArrowUpRight size={15} /></a>
     </header>
   );
 }
@@ -129,7 +129,7 @@ function Contact() {
     <section className="labs-contact" id="contact">
       <p className="labs-eyebrow"><span /> A better system starts here</p>
       <h2>Bring us the<br /><i>hard part.</i></h2>
-      <a href="mailto:hello@bespokelabs.dev" className="labs-contact-link">hello@bespokelabs.dev <ArrowUpRight /></a>
+      <a href="mailto:info@bespokeapps.co.za" className="labs-contact-link">info@bespokeapps.co.za <ArrowUpRight /></a>
       <footer><span>© {new Date().getFullYear()} Bespoke Applications Labs</span><span>Built to be useful.</span></footer>
     </section>
   );

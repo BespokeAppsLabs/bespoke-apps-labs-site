@@ -143,5 +143,5 @@ export const engage: Extra = {
   aLabel: "Bring along",
   items: ["The process that keeps failing", "Who touches it, and where it stalls", "What it costs you when it does", "Anything already built that has to survive"],
   bLabel: "Send it",
-  bText: "hello@bespokelabs.dev — or use the form. We reply from a person, not a sequence.",
+  bText: "info@bespokeapps.co.za — or use the form. We reply from a person, not a sequence.",
 };
