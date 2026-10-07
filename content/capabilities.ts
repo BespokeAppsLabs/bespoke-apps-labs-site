@@ -1,5 +1,5 @@
 export type Capability = {
-  id: "apps" | "agents" | "media" | "square" | "networks" | "academy";
+  id: "apps" | "agents" | "media" | "os" | "networks" | "academy";
   n: "01" | "02" | "03" | "04" | "05" | "06";
   name: string;
   short: string;
@@ -54,16 +54,16 @@ export const capabilities: Capability[] = [
     },
   },
   {
-    id: "square", n: "04", name: "Town Square", angle: 330, meta: "Commerce layer",
+    id: "os", n: "04", name: "BespokeOS", angle: 330, meta: "Operating layer",
     bars: [11, 13, 5],
-    short: "Marketplaces, storefronts and the unglamorous machinery beneath them.",
+    short: "One operator over the whole business — build, inbox, clients, media, sites and finance in one place.",
     dialog: {
-      title: "The infrastructure under local commerce.",
-      body: "Marketplaces, storefronts and the unglamorous machinery beneath them — listings, payments, fulfilment, disputes. Built for merchants who need it to work on a bad-signal phone on a busy Saturday.",
-      aLabel: "What it covers",
-      items: ["Multi-merchant marketplace platforms", "Payments, payouts and reconciliation", "Catalogue, inventory and fulfilment", "Merchant onboarding and support tools"],
-      bLabel: "Typical shape",
-      bText: "An operator with real supply and real demand who is currently holding both together with spreadsheets and WhatsApp.",
+      title: "The whole operation, run from one window.",
+      body: "BespokeOS is the operating system we are building to run our own studio: one lead AI operator over clearly separated sections of the business, each with its own tools and its own approval points. Nothing consequential happens without a person signing it off, and every action leaves a record.",
+      aLabel: "The sections",
+      items: ["Factory — software built, reviewed and shipped", "Inbox and Assistant — triage, drafting, follow-up", "Clients — relationships, pipeline and delivery", "Media, Sites and Finance — production, publishing, the numbers"],
+      bLabel: "Where it stands",
+      bText: "In active development, section by section, starting with the Factory. It runs on our own machines and our own data first — what proves itself there is what we build for clients.",
     },
   },
   {
@@ -105,7 +105,7 @@ export type Extra = { id: string; title: string; kicker: string; body: string; a
 export const extras: Extra[] = [
   {
     id: "studio", title: "The Studio", kicker: "THE STUDIO",
-    body: "Bespoke Applications Labs engineers the applications, AI operators and infrastructure that turn complex businesses into clear, capable systems. We work across the layers that decide whether a business actually moves — product, intelligence, creative, commerce, infrastructure and capability — and we work on the parts that are hard.",
+    body: "Bespoke Applications Labs engineers the applications, AI operators and infrastructure that turn complex businesses into clear, capable systems. We work across the layers that decide whether a business actually moves — product, intelligence, creative, operations, infrastructure and capability — and we work on the parts that are hard.",
     aLabel: "How we engage",
     items: ["Small senior team, one system at a time", "Fixed scope per phase, reviewed at each gate", "Your systems, your data, your accounts", "Handover documentation as a deliverable"],
     bLabel: "What we do not do",

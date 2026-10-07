@@ -6,7 +6,7 @@ import { type CardData } from "@/components/v1/floating-cards-scene";
 import {
   Layers,
   Sparkles,
-  ShoppingBag,
+  LayoutGrid,
   GraduationCap,
   Bot,
   Network,
@@ -57,12 +57,12 @@ const cards: (CardData & { features?: string[] })[] = [
     color: "#f97316",
   },
   {
-    id: "mall",
-    title: "Town Square",
-    subtitle: "Bespoke Mall Marketplace",
+    id: "os",
+    title: "BespokeOS",
+    subtitle: "The Business Operating System",
     description:
-      "A unified digital marketplace connecting all businesses - from healthcare providers and salons to restaurants and retail stores. One platform, infinite possibilities.",
-    icon: <ShoppingBag className="w-6 h-6" />,
+      "One lead AI operator over every section of the business - build, inbox, clients, media, sites and finance - with a human signing off every consequential step.",
+    icon: <LayoutGrid className="w-6 h-6" />,
     color: "#8b5cf6",
   },
   {
