@@ -28,6 +28,7 @@ export default function ContactForm() {
       }
 
       setIsSent(true);
+      window.dispatchEvent(new CustomEvent("contact:sent"));
       setFormState({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error sending message:", error);

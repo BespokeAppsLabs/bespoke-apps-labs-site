@@ -1,5 +1,9 @@
 import { capabilities, extras, engage } from "@/content/capabilities";
 import { OTHER_PROVINCES, PRIMARY_PROVINCES } from "@/content/locations";
+import { FOUNDER, PROJECTS } from "@/content/woven";
+
+/* Where each extra lives on the homepage. */
+const EXTRA_ANCHOR: Record<string, string> = { studio: "manifesto", method: "method", rhythm: "method", disciplines: "layers" };
 
 /* Set NEXT_PUBLIC_SITE_URL in Vercel. The fallback is a best guess from the contact
    address — confirm the real production domain before launch. */
@@ -20,10 +24,10 @@ export function llmsText(full: boolean): string {
   L.push("");
   L.push(
     "Bespoke Applications Labs is a South Africa based studio working across six layers: product, " +
-    "intelligence, creative, operations, infrastructure and capability. The site is a single operator " +
-    "console — every section below opens as a dialog on the same page, addressable as " +
-    "`/?panel=<id>`. There are deliberately no metrics, client logos or testimonials on the site; " +
-    "none were verifiable, and none were invented."
+    "intelligence, creative, operations, infrastructure and capability. The site is one scrolling page " +
+    "with a narrated guided tour by NOVA, the studio's own AI social-media agent; each section below is " +
+    "an anchor on that page. There are deliberately no metrics or testimonials on the site; none were " +
+    "verifiable, and none were invented."
   );
   L.push("");
 
@@ -31,7 +35,7 @@ export function llmsText(full: boolean): string {
   L.push("");
   for (const c of capabilities) {
     L.push(`### ${c.n} — ${c.name} (${c.meta})`);
-    L.push(`URL: ${SITE_URL}/?panel=${c.id}`);
+    L.push(`URL: ${SITE_URL}/#layers`);
     L.push("");
     L.push(c.dialog.title);
     L.push("");
@@ -50,7 +54,7 @@ export function llmsText(full: boolean): string {
   L.push("");
   for (const e of extras) {
     L.push(`### ${e.title}`);
-    L.push(`URL: ${SITE_URL}/?panel=${e.id}`);
+    L.push(`URL: ${SITE_URL}/#${EXTRA_ANCHOR[e.id] ?? "manifesto"}`);
     L.push("");
     L.push(e.body);
     L.push("");
@@ -62,6 +66,22 @@ export function llmsText(full: boolean): string {
       L.push("");
     }
   }
+
+  L.push("## Work");
+  L.push("");
+  L.push(`URL: ${SITE_URL}/#work`);
+  L.push("");
+  for (const p of PROJECTS) {
+    L.push(`- ${p.title} (${p.layer}, ${p.status}): ${p.line}${p.links ? " " + p.links.map((l) => `${l.label}: ${l.href}`).join(" · ") : ""}`);
+  }
+  L.push("");
+
+  L.push("## Founder");
+  L.push("");
+  L.push(`URL: ${SITE_URL}/#founder`);
+  L.push("");
+  L.push(`${FOUNDER.name}, ${FOUNDER.role}. ${FOUNDER.bio} Personal site: ${FOUNDER.site}`);
+  L.push("");
 
   L.push("## Where we work");
   L.push("");
@@ -91,7 +111,7 @@ export function llmsText(full: boolean): string {
 
   L.push("## Engagement");
   L.push("");
-  L.push(`URL: ${SITE_URL}/?panel=engage`);
+  L.push(`URL: ${SITE_URL}/#contact`);
   L.push("");
   L.push(engage.body);
   L.push("");
