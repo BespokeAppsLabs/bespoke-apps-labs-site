@@ -1,6 +1,6 @@
 # ADR 0001 — Single-page operator console with dialog navigation
 
-**Status:** Accepted (design), pending implementation
+**Status:** Superseded by [ADR 0002](0002-woven-studio.md) (2026-10-09)
 **Date:** 2026-08-27
 **Supersedes:** the scrolling editorial layout in `components/v2/landing-page.tsx`
 **Spec:** [`docs/operator-console/BUILD-SPEC.md`](../operator-console/BUILD-SPEC.md)

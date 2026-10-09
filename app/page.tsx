@@ -1,25 +1,13 @@
-import { Suspense } from "react";
-import { Console } from "@/components/hq/console";
 import { capabilities, extras, engage } from "@/content/capabilities";
+import { WovenHome } from "@/components/woven/home";
+import "./woven.css";
 import { SITE_NAME, SITE_SUMMARY, SITE_URL } from "@/lib/site";
 import { ALL_PROVINCES, OTHER_PROVINCES, PRIMARY_PROVINCES } from "@/content/locations";
 
-/* Rendered by the SERVER component, deliberately outside the Suspense boundary.
-   Console uses useSearchParams, so anything inside that boundary is prerendered as the
-   fallback — putting this here is what guarantees crawlers get every dialog body in the
-   static HTML. Verified with: curl localhost:3000 | grep "Product design and front-end" */
-function CrawlerContent() {
-  const records = [
-    ...capabilities.map((c) => ({
-      id: c.id, title: c.dialog.title, body: c.dialog.body,
-      items: c.dialog.items, bText: c.dialog.bText, name: c.name, short: c.short,
-    })),
-    ...extras.map((e) => ({ id: e.id, title: e.title, body: e.body, items: e.items, bText: e.bText, name: e.title, short: "" })),
-    { id: engage.id, title: engage.title, body: engage.body, items: engage.items, bText: engage.bText, name: engage.title, short: "" },
-  ];
+/* Service-area detail for crawlers. Everything else is visible page copy in WovenHome. */
+function CoverageContent() {
   return (
     <div className="hq-seo">
-      <h1>Bespoke Applications Labs — applications, AI operators and infrastructure</h1>
       <section>
         <h2>Where we work</h2>
         <p>
@@ -42,16 +30,6 @@ function CrawlerContent() {
           </div>
         ))}
       </section>
-      {records.map((r) => (
-        <article key={r.id}>
-          <h2>{r.name}</h2>
-          <p>{r.title}</p>
-          {r.short && <p>{r.short}</p>}
-          <p>{r.body}</p>
-          <ul>{r.items.map((i) => <li key={i}>{i}</li>)}</ul>
-          <p>{r.bText}</p>
-        </article>
-      ))}
     </div>
   );
 }
@@ -86,11 +64,11 @@ function StructuredData() {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            "@id": `${SITE_URL}/?panel=${c.id}`,
+            "@id": `${SITE_URL}/#layers`,
             name: c.name,
             serviceType: c.meta,
             description: c.dialog.body,
-            url: `${SITE_URL}/?panel=${c.id}`,
+            url: `${SITE_URL}/#layers`,
             hasOfferCatalog: {
               "@type": "OfferCatalog",
               name: c.dialog.aLabel,
@@ -133,10 +111,8 @@ export default function Home() {
   return (
     <>
       <StructuredData />
-      <CrawlerContent />
-      <Suspense>
-        <Console />
-      </Suspense>
+      <WovenHome />
+      <CoverageContent />
     </>
   );
 }

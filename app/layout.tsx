@@ -3,7 +3,13 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { SITE_NAME, SITE_SUMMARY, SITE_TAGLINE, SITE_URL } from '@/lib/site'
 import { MAJOR_SA_CITIES, PRIMARY_PROVINCES } from '@/content/locations'
+import localFont from 'next/font/local'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+
+/* Unbounded (OFL) is self-hosted from app/fonts so builds never depend on Google Fonts. */
+const unbounded = localFont({ src: './fonts/Unbounded.ttf', variable: '--font-unbounded', weight: '200 900', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -58,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${unbounded.variable}`}>
       <body className="antialiased" suppressHydrationWarning>
         {children}
         <Analytics />
