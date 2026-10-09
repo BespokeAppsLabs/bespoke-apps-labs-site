@@ -425,7 +425,10 @@ export default function V1Page() {
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
-          <ContactForm />
+          <div className="border border-white/10 bg-[#071110] p-6">
+            <p className="hq-dialog-kicker">Get in touch</p>
+            <ContactForm />
+          </div>
         </div>
       </div>
 
